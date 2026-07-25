@@ -1,0 +1,17 @@
+tunnel: 2eca5f14-caf8-4b89-8381-666a7b1a0cd6
+credentials-file: /etc/cloudflared/2eca5f14-caf8-4b89-8381-666a7b1a0cd6.json
+
+ingress:
+  - hostname: jellyfin.mjjmedia.com
+    service: http://caddy:80
+  - hostname: audiobooks.mjjmedia.com
+    service: http://caddy:80
+  - hostname: music.mjjmedia.com
+    service: http://caddy:80
+  - hostname: comics.mjjmedia.com
+    service: http://caddy:80
+  - hostname: books.mjjmedia.com
+    service: http://caddy:80
+  - hostname: videos.mjjmedia.com
+    service: http://caddy:80
+  - service: http_status:404

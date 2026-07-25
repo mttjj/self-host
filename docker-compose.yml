@@ -16,8 +16,8 @@ services:
     restart: unless-stopped
     command: tunnel run
     volumes:
-      - ~/.cloudflared/config.yml:/etc/cloudflared/config.yml:ro
-      - ~/.cloudflared/2eca5f14-caf8-4b89-8381-666a7b1a0cd6.json:/etc/cloudflared/2eca5f14-caf8-4b89-8381-666a7b1a0cd6.json:ro
+      - ~/.self-host/cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+      - ~/.self-host/cloudflared/2eca5f14-caf8-4b89-8381-666a7b1a0cd6.json:/etc/cloudflared/2eca5f14-caf8-4b89-8381-666a7b1a0cd6.json:ro
     depends_on:
       - caddy
 
