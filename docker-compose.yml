@@ -67,7 +67,8 @@ services:
       - ND_LOGLEVEL=info
       - ND_SESSIONTIMEOUT=24h
     volumes:
-      - /Volumes/external/Music:/music:ro
+      - /Volumes/external/Music/Main Library:/music:ro
+      - /Volumes/external/Music/Video Games:/library/games:ro
       - navidrome-data:/data
 
 volumes:
