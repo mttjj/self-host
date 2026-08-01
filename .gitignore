@@ -3,6 +3,3 @@
 
 # Environment/secrets
 *.env
-*.pem
-
-cloudflared/*.json

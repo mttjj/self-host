@@ -24,7 +24,7 @@ services:
       - ${CLOUDFLARED_TUNNEL_ID}
     volumes:
       - ./cloudflared/config.yml:/etc/cloudflared/config.yml:ro
-      - ./cloudflared/${CLOUDFLARED_CREDENTIALS_FILENAME}:/etc/cloudflared/${CLOUDFLARED_CREDENTIALS_FILENAME}:ro
+      - ~/.cloudflared/${CLOUDFLARED_CREDENTIALS_FILENAME}:/etc/cloudflared/${CLOUDFLARED_CREDENTIALS_FILENAME}:ro
     depends_on:
       - caddy
 
