@@ -12,6 +12,4 @@ ingress:
     service: http://caddy:80
   - hostname: books.mjjmedia.com
     service: http://caddy:80
-  - hostname: videos.mjjmedia.com
-    service: http://caddy:80
   - service: http_status:404
