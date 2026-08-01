@@ -6,7 +6,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ~/.self-host/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy-config:/config
       - caddy-data:/data
 
@@ -14,10 +14,17 @@ services:
     image: cloudflare/cloudflared:latest
     container_name: cloudflared
     restart: unless-stopped
-    command: tunnel run
+    command:
+      - tunnel
+      - --config
+      - /etc/cloudflared/config.yml
+      - run
+      - --credentials-file
+      - /etc/cloudflared/${CLOUDFLARED_CREDENTIALS_FILENAME}
+      - ${CLOUDFLARED_TUNNEL_ID}
     volumes:
-      - ~/.self-host/cloudflared/config.yml:/etc/cloudflared/config.yml:ro
-      - ~/.self-host/cloudflared/2eca5f14-caf8-4b89-8381-666a7b1a0cd6.json:/etc/cloudflared/2eca5f14-caf8-4b89-8381-666a7b1a0cd6.json:ro
+      - ./cloudflared/config.yml:/etc/cloudflared/config.yml:ro
+      - ./cloudflared/${CLOUDFLARED_CREDENTIALS_FILENAME}:/etc/cloudflared/${CLOUDFLARED_CREDENTIALS_FILENAME}:ro
     depends_on:
       - caddy
 
@@ -28,7 +35,7 @@ services:
     ports:
       - "13378:80"
     volumes:
-      - /Volumes/external/Audiobooks:/audiobooks:ro
+      - ${AUDIOBOOKS_PATH}:/audiobooks:ro
       - abs-config:/config
       - abs-metadata:/metadata
 
@@ -39,7 +46,7 @@ services:
     ports:
       - "8083:8083"
     volumes:
-      - /Volumes/external/Books/CalibreApp:/books
+      - ${BOOKS_PATH}:/books
       - calibre-web-config:/config
 
   komga:
@@ -52,8 +59,8 @@ services:
       - SERVER_PORT=25600
       - KOMGA_LIBRARIES_SCAN_DIRECTORY_EXCLUSIONS=@supplements
     volumes:
-      - /Volumes/external/Books/Comics:/comics:ro
-      - /Volumes/external/Books/Magazines:/magazines:ro
+      - ${COMICS_PATH}:/comics:ro
+      - ${MAGAZINES_PATH}:/magazines:ro
       - komga-config:/config
 
   navidrome:
@@ -67,8 +74,8 @@ services:
       - ND_LOGLEVEL=info
       - ND_SESSIONTIMEOUT=24h
     volumes:
-      - /Volumes/external/Music/Main Library:/music:ro
-      - /Volumes/external/Music/Video Games:/library/games:ro
+      - ${MAIN_MUSIC_PATH}:/music:ro
+      - ${VIDEO_GAME_MUSIC_PATH}:/library/games:ro
       - navidrome-data:/data
 
 volumes:
