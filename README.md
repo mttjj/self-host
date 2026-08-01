@@ -1,45 +1,66 @@
-# Self Hosting Media
+# Self-hosted media stack
 
-## Initial Setup Guide
-### Prerequisites
-- Homebrew installed
+This repo provides a small Docker Compose setup for serving media through a reverse proxy and Cloudflare Tunnel. It includes:
 
-### Installations
-1. Install [Jellyfin](https://jellyfin.org):
-    ```bash
-    brew install jellyfin
-    ```
-2. Install [OrbStack](https://orbstack.dev):
-    ```bash
-    brew install orbstack
-    ```
-3. Install [cloudflared](https://github.com/cloudflare/cloudflared):
-    ```bash
-    brew install cloudflared
-    ```
+- [caddy/Caddyfile](caddy/Caddyfile) for reverse proxying to the local services
+- [cloudflared/config.yml](cloudflared/config.yml) for the tunnel ingress rules
+- [docker-compose.yml](docker-compose.yml) for the services themselves
 
-### Cloudflared Setup
-1. Login:
+The stack currently runs:
+
+- Caddy
+- Cloudflared
+- Audiobookshelf
+- Calibre Web
+- Komga
+- Navidrome
+
+## Prerequisites
+
+- Docker Desktop or OrbStack installed and running
+- Docker Compose v2 (`docker compose`)
+- [cloudflared](https://github.com/cloudflare/cloudflared) installed locally
+- A local Jellyfin instance running on the host at `host.docker.internal:8096` (this repo does not start Jellyfin itself)
+- The media folders you want to expose must exist at the paths you configure below
+
+## Configuration
+
+1. Copy [.env.example](.env.example) to [.env](.env) and update it for your environment.
+
+  The env file controls:
+  - the media library paths mounted into each service
+  - the hostnames used by Caddy and the tunnel ingress rules
+  - the Cloudflare tunnel ID and credentials filename
+
+2. Make sure the Cloudflare Tunnel credentials JSON file exists in [cloudflared/](cloudflared). The filename should match the value in `CLOUDFLARED_CREDENTIALS_FILENAME`.
+
+3. If needed, update [caddy/Caddyfile](caddy/Caddyfile) and [cloudflared/config.yml](cloudflared/config.yml) to match your hostnames and routing preferences.
+
+## Cloudflare Tunnel setup
+
+If you are configuring the tunnel for the first time:
+
 ```bash
 cloudflared tunnel login
-```
-2. Create Tunnel:
-```bash
-cloudflared tunnel create neptune
-```
-3. Update (config.yml)[/cloudflared/config.yml] with the new UUID of the tunnel
-4. Update (docker-compose.yml)[/docker-compose.yml] with the new UUID of the tunnel
-4. Create DNS CNAME records for each subdomain
-```bash
-cloudflared tunnel route dns neptune jellyfin.mjjmedia.com
-cloudflared tunnel route dns neptune audiobooks.mjjmedia.com
-cloudflared tunnel route dns neptune music.mjjmedia.com
-cloudflared tunnel route dns neptune comics.mjjmedia.com
-cloudflared tunnel route dns neptune books.mjjmedia.com
+cloudflared tunnel create <tunnel-name>
 ```
 
-### Docker Setup
-Create volumes for the containers
+Then create DNS records for the hostnames you want to expose:
+
+```bash
+cloudflared tunnel route dns <tunnel-name> jellyfin.mjjmedia.com
+cloudflared tunnel route dns <tunnel-name> audiobooks.mjjmedia.com
+cloudflared tunnel route dns <tunnel-name> music.mjjmedia.com
+cloudflared tunnel route dns <tunnel-name> comics.mjjmedia.com
+cloudflared tunnel route dns <tunnel-name> books.mjjmedia.com
+```
+
+Use the tunnel UUID from the `create` step for `CLOUDFLARED_TUNNEL_ID` in [.env](.env), and make sure the matching JSON credentials file is present in [cloudflared/](cloudflared).
+
+## Docker volumes
+
+Create the external Docker volumes used by the stack:
+
 ```bash
 docker volume create abs-config
 docker volume create abs-metadata
@@ -50,13 +71,38 @@ docker volume create komga-config
 docker volume create navidrome-data
 ```
 
-### Running Services
-Bring up all docker services at once:
+## Start the services
+
+Bring everything up:
+
 ```bash
 docker compose up -d
 ```
 
-Or bring them up individually to perform initial setup/config on each service:
+Or start a single service first:
+
 ```bash
-docker compose up -d <service name>
+docker compose up -d <service-name>
+```
+
+## Service URLs
+
+Once running, the services are expected to be reachable through the configured hostnames and the local exposed ports:
+
+- Audiobookshelf: http://localhost:13378
+- Calibre Web: http://localhost:8083
+- Komga: http://localhost:25600
+- Navidrome: http://localhost:4533
+
+## Useful commands
+
+```bash
+# View logs
+docker compose logs -f <service-name>
+
+# Stop everything
+docker compose down
+
+# Rebuild/recreate a service after config changes
+docker compose up -d --force-recreate <service-name>
 ```
