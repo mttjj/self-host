@@ -4,7 +4,7 @@ services:
     container_name: caddy
     restart: unless-stopped
     ports:
-      - "80:80"
+      - 80:80
     volumes:
       - ./caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy-config:/config
@@ -33,7 +33,7 @@ services:
     container_name: audiobookshelf
     restart: unless-stopped
     ports:
-      - "13378:80"
+      - 13378:80
     volumes:
       - ${AUDIOBOOKS_PATH}:/audiobooks:ro
       - abs-config:/config
@@ -44,17 +44,29 @@ services:
     container_name: calibre-web
     restart: unless-stopped
     ports:
-      - "8083:8083"
+      - 8083:8083
     volumes:
       - ${BOOKS_PATH}:/books
       - calibre-web-config:/config
+
+  karakeep:
+    image: ghcr.io/karakeep-app/karakeep:release
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    environment:
+      - NEXTAUTH_SECRET=${KARAKEEP_NEXTAUTH_SECRET}
+      - NEXTAUTH_URL=http://localhost:3000
+      - DATA_DIR=/data
+    volumes:
+      - karakeep-data:/data
 
   komga:
     image: gotson/komga:latest
     container_name: komga
     restart: unless-stopped
     ports:
-      - "25600:25600"
+      - 25600:25600
     environment:
       - SERVER_PORT=25600
       - KOMGA_LIBRARIES_SCAN_DIRECTORY_EXCLUSIONS=@supplements
@@ -68,7 +80,7 @@ services:
     container_name: navidrome
     restart: unless-stopped
     ports:
-      - "4533:4533"
+      - 4533:4533
     environment:
       - ND_SCANSCHEDULE=0
       - ND_LOGLEVEL=info
@@ -88,6 +100,8 @@ volumes:
   abs-metadata:
     external: true
   calibre-web-config:
+    external: true
+  karakeep-data:
     external: true
   komga-config:
     external: true

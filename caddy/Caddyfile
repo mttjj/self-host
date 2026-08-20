@@ -17,3 +17,7 @@ http://comics.mjjmedia.com {
 http://books.mjjmedia.com {
 	reverse_proxy calibre-web:8083
 }
+
+http://links.mjjmedia.com {
+	reverse_proxy karakeep:3000
+}
