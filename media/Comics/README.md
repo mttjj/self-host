@@ -28,3 +28,11 @@ git submodule update --init --recursive
 ```
 
 ## Metadata Preparation
+- https://github.com/ajslater/comicbox
+```bash
+py -m venv venv
+source venv/bin/activate
+pip install comicbox
+```
+
+https://trevoedwards.com/comictagger/
