@@ -9,8 +9,8 @@ services:
       - 80:80
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile
-      - caddy-config:/config
-      - caddy-data:/data
+      - ${CADDY_CONFIG_PATH}:/config
+      - ${CADDY_DATA_PATH}:/data
     networks:
       - shared
 
@@ -33,12 +33,6 @@ services:
       - shared
     depends_on:
       - caddy
-
-volumes:
-  caddy-config:
-    external: true
-  caddy-data:
-    external: true
 
 networks:
   shared:
