@@ -2,7 +2,7 @@
 *.code-workspace
 
 # Environment/secrets
-*.env
+.env
 
 # Python virtual environment
 */.venv/
