@@ -9,16 +9,10 @@ services:
       - 13378:80
     volumes:
       - ${AUDIOBOOKS_PATH}:/audiobooks:ro
-      - abs-config:/config
-      - abs-metadata:/metadata
+      - ${ABS_CONFIG_PATH}:/config
+      - ${ABS_METADATA_PATH}:/metadata
     networks:
       - shared
-
-volumes:
-  abs-config:
-    external: true
-  abs-metadata:
-    external: true
 
 networks:
   shared:
