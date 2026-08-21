@@ -1,0 +1,25 @@
+name: links
+
+services:
+  karakeep:
+    image: ghcr.io/karakeep-app/karakeep:release
+    restart: unless-stopped
+    ports:
+      - 3000:3000
+    environment:
+      - NEXTAUTH_SECRET=${NEXTAUTH_SECRET}
+      - NEXTAUTH_URL=http://localhost:3000
+      - DATA_DIR=/data
+    volumes:
+      - karakeep-data:/data
+    networks:
+      - shared
+
+volumes:
+  karakeep-data:
+    external: true
+
+networks:
+  shared:
+    external: true
+    name: shared-self-host

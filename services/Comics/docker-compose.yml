@@ -1,0 +1,27 @@
+name: comics
+
+services:
+  komga:
+    image: gotson/komga:latest
+    container_name: komga
+    restart: unless-stopped
+    ports:
+      - 25600:25600
+    environment:
+      - SERVER_PORT=25600
+      - KOMGA_LIBRARIES_SCAN_DIRECTORY_EXCLUSIONS=@supplements
+    volumes:
+      - ${COMICS_PATH}:/comics:ro
+      - ${MAGAZINES_PATH}:/magazines:ro
+      - komga-config:/config
+    networks:
+      - shared
+
+volumes:
+  komga-config:
+    external: true
+
+networks:
+  shared:
+    external: true
+    name: shared-self-host

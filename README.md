@@ -1,10 +1,9 @@
 # Self-hosted media stack
 
-This repo provides a small Docker Compose setup for serving media through a reverse proxy and Cloudflare Tunnel. It includes:
+This repo provides Docker Compose setups for serving media through a reverse proxy and Cloudflare Tunnel. It includes:
 
-- [caddy/Caddyfile](caddy/Caddyfile) for reverse proxying to the local services
-- [cloudflared/config.yml](cloudflared/config.yml) for the tunnel ingress rules
-- [docker-compose.yml](docker-compose.yml) for the services themselves
+- [services/proxy/Caddyfile](services/proxy/Caddyfile) for reverse proxying to the local services
+- [services/proxy/cloudflared-config.yml](services/proxy/cloudflared-config.yml) for the tunnel ingress rules
 
 ## Prerequisites
 
@@ -32,7 +31,17 @@ cloudflared tunnel route dns neptune jellyfin.mjjmedia.com && \
 cloudflared tunnel route dns neptune audiobooks.mjjmedia.com && \
 cloudflared tunnel route dns neptune music.mjjmedia.com && \
 cloudflared tunnel route dns neptune comics.mjjmedia.com && \
-cloudflared tunnel route dns neptune books.mjjmedia.com
+cloudflared tunnel route dns neptune books.mjjmedia.com && \
+cloudflared tunnel route dns neptune links.mjjmedia.com
+```
+
+## Docker networks
+
+Create the external Docker networks used by the stack:
+
+```bash
+docker network create shared-self-host && \
+docker network create isolated
 ```
 
 ## Docker volumes
@@ -40,30 +49,12 @@ cloudflared tunnel route dns neptune books.mjjmedia.com
 Create the external Docker volumes used by the stack:
 
 ```bash
-docker volume create abs-config && \
-docker volume create abs-metadata && \
 docker volume create caddy-config && \
 docker volume create caddy-data && \
+docker volume create abs-config && \
+docker volume create abs-metadata && \
 docker volume create calibre-web-config && \
+docker volume create karakeep-data && \
 docker volume create komga-config && \
 docker volume create navidrome-data
-```
-
-## Configuration
-
-1. Copy [.env.example](.env.example) to `.env` and update the Cloudflare details with the UUID copied from the cloudflared steps above
-
-
-## Start the services
-
-Bring everything up:
-
-```bash
-docker compose up -d
-```
-
-Or start a single service first:
-
-```bash
-docker compose up -d <service-name>
 ```

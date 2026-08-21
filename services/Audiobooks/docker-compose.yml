@@ -1,0 +1,26 @@
+name: audiobooks
+
+services:
+  audiobookshelf:
+    image: ghcr.io/advplyr/audiobookshelf:latest
+    container_name: audiobookshelf
+    restart: unless-stopped
+    ports:
+      - 13378:80
+    volumes:
+      - ${AUDIOBOOKS_PATH}:/audiobooks:ro
+      - abs-config:/config
+      - abs-metadata:/metadata
+    networks:
+      - shared
+
+volumes:
+  abs-config:
+    external: true
+  abs-metadata:
+    external: true
+
+networks:
+  shared:
+    name: shared-self-host
+    external: true

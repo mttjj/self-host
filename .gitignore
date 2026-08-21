@@ -5,4 +5,4 @@
 *.env
 
 # Python virtual environment
-media/Comics/pdf-to-cbz-converter/.venv/
+*/.venv/

@@ -1,0 +1,23 @@
+name: books
+
+services:
+  calibre-web:
+    image: lscr.io/linuxserver/calibre-web:latest
+    container_name: calibre-web
+    restart: unless-stopped
+    ports:
+      - 8083:8083
+    volumes:
+      - ${BOOKS_PATH}:/books
+      - calibre-web-config:/config
+    networks:
+      - shared
+
+volumes:
+  calibre-web-config:
+    external: true
+
+networks:
+  shared:
+    external: true
+    name: shared-self-host

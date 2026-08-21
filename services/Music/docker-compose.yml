@@ -1,0 +1,28 @@
+name: music
+
+services:
+  navidrome:
+    image: deluan/navidrome:latest
+    container_name: navidrome
+    restart: unless-stopped
+    ports:
+      - 4533:4533
+    environment:
+      - ND_SCANSCHEDULE=0
+      - ND_LOGLEVEL=info
+      - ND_SESSIONTIMEOUT=24h
+    volumes:
+      - ${MAIN_MUSIC_PATH}:/music:ro
+      - ${VIDEO_GAME_MUSIC_PATH}:/library/games:ro
+      - navidrome-data:/data
+    networks:
+      - shared
+
+volumes:
+  navidrome-data:
+    external: true
+
+networks:
+  shared:
+    external: true
+    name: shared-self-host
