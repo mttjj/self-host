@@ -1,0 +1,3 @@
+[submodule "services/Comics/pdf-to-cbz-converter"]
+	path = services/Comics/pdf-to-cbz-converter
+	url = https://github.com/r45635/pdf-to-cbz-converter.git
