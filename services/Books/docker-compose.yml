@@ -9,13 +9,9 @@ services:
       - 8083:8083
     volumes:
       - ${BOOKS_PATH}:/books
-      - calibre-web-config:/config
+      - ${CALIBRE_WEB_CONFIG_PATH}:/config
     networks:
       - shared
-
-volumes:
-  calibre-web-config:
-    external: true
 
 networks:
   shared:
