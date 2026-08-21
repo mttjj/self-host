@@ -13,13 +13,9 @@ services:
     volumes:
       - ${COMICS_PATH}:/comics:ro
       - ${MAGAZINES_PATH}:/magazines:ro
-      - komga-config:/config
+      - ${KOMGA_CONFIG_PATH}:/config
     networks:
       - shared
-
-volumes:
-  komga-config:
-    external: true
 
 networks:
   shared:
