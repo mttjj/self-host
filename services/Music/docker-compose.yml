@@ -14,13 +14,9 @@ services:
     volumes:
       - ${MAIN_MUSIC_PATH}:/music:ro
       - ${VIDEO_GAME_MUSIC_PATH}:/library/games:ro
-      - navidrome-data:/data
+      - ${NAVIDROME_DATA_PATH}:/data
     networks:
       - shared
-
-volumes:
-  navidrome-data:
-    external: true
 
 networks:
   shared:
