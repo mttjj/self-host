@@ -21,3 +21,7 @@ http://books.mjjmedia.com {
 http://links.mjjmedia.com {
 	reverse_proxy karakeep:3000
 }
+
+http://photos.mjjmedia.com {
+	reverse_proxy immich-server:2283
+}
