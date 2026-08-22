@@ -43,18 +43,3 @@ Create the external Docker networks used by the stack:
 docker network create shared-self-host && \
 docker network create isolated
 ```
-
-## Docker volumes
-
-Create the external Docker volumes used by the stack:
-
-```bash
-docker volume create caddy-config && \
-docker volume create caddy-data && \
-docker volume create abs-config && \
-docker volume create abs-metadata && \
-docker volume create calibre-web-config && \
-docker volume create karakeep-data && \
-docker volume create komga-config && \
-docker volume create navidrome-data
-```
